@@ -1,5 +1,5 @@
-#include<stdio.h>
-int main(){
-    printf("hello world");
-    return 0;
-}
+// ORIGIN IS (360.0,360.0)
+// SCALE IS (100.0,100.0)
+// SCALE IS (100.0, 100.0/3.0)
+// ROT IS PI/2.0
+FOR T FROM 0 TO 2.0*PI STEP PI/50.0 DRAW (COS(T), SIN(T));
