@@ -1,6 +1,7 @@
 # 画图程序的词法分析器
 from collections import namedtuple
 import math
+
 class Scanner:
     def __init__(self,filename):
         self.filename = filename
