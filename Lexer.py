@@ -2,33 +2,34 @@
 from collections import namedtuple
 import math
 
+Token = namedtuple('Token',['type','value','function'])
+LINETOKEN = namedtuple("LINETOKEN",['LineNo','Tokens'])
+
+
 class Scanner:
     def __init__(self,filename):
         self.filename = filename
-        self.Token = namedtuple('Token',['type','value','function'])
-        self.ERRORTOKEN = namedtuple('ERRORTOKEN',['line','word'])
-        self.LINETOKEN = namedtuple("LINETOKEN",['LineNo','Tokens'])
         self.special = ('*','/','-','+','(',')',',',';','.')
 
         # 保留关键字
-        self.Token_table = {'PI': self.Token('CONST ID', 3.1415926,None),
-              'E': self.Token('CONST ID', 2.71828,None),
-              'T': self.Token('T', 0.0,None),
-              'SIN': self.Token('FUNC', 0.0,math.sin),
-              'COS': self.Token('FUNC', 0.0,math.cos),
-              'TAN': self.Token('FUNC', 0.0,math.tan),
-              'LN': self.Token('FUNC', 0.0,math.log),
-              'EXP': self.Token('FUNC', 0.0,math.exp),
-              'SQRT':self.Token('FUNC', 0.0,math.sqrt),
-              'ORIGIN': self.Token('ORIGIN', 0.0,None),
-              'SCALE': self.Token('SCALE',0.0,None),
-              'ROT': self.Token('ROT', 0.0,None),
-              'IS': self.Token('IS', 0.0,None),
-              'FOR': self.Token('FOR', 0.0,None),
-              'FROM': self.Token('FROM', 0.0,None),
-              'TO': self.Token('TO', 0.0,None),
-              'STEP': self.Token('STEP', 0.0,None),
-              'DRAW': self.Token('DRAW', 0.0,None)
+        self.Token_table = {'PI': Token('CONST ID', 3.1415926,None),
+              'E': Token('CONST ID', 2.71828,None),
+              'T': Token('T', 0.0,None),
+              'SIN': Token('FUNC', 0.0,math.sin),
+              'COS': Token('FUNC', 0.0,math.cos),
+              'TAN': Token('FUNC', 0.0,math.tan),
+              'LN': Token('FUNC', 0.0,math.log),
+              'EXP': Token('FUNC', 0.0,math.exp),
+              'SQRT':Token('FUNC', 0.0,math.sqrt),
+              'ORIGIN': Token('ORIGIN', 0.0,None),
+              'SCALE': Token('SCALE',0.0,None),
+              'ROT': Token('ROT', 0.0,None),
+              'IS': Token('IS', 0.0,None),
+              'FOR': Token('FOR', 0.0,None),
+              'FROM': Token('FROM', 0.0,None),
+              'TO': Token('TO', 0.0,None),
+              'STEP': Token('STEP', 0.0,None),
+              'DRAW': Token('DRAW', 0.0,None)
             }
 
         # 状态机转换而来的树
@@ -42,7 +43,7 @@ class Scanner:
                     6 : {'/': 13,'break': 'DIVISION'},
                     7 : {'-' : 13, 'break':'SUBDUCTION'},
                     8 : {'break': 'PLUS'},
-                    9 : {'break': 'SEMICO'},
+                    9 : {'break': 'COMMA'},
                     10 : {'break': 'SEMICO'},
                     11 : {'break': 'L_BRACKET'},
                     12 : {'break': 'R_BRACKET'},
@@ -61,7 +62,7 @@ class Scanner:
     def judgeWord(self,word,line):
         token = self.Token_table.get(word,None)
         if token is None:
-            return self.ERRORTOKEN(line,word)
+            return Token("ERROR",word,None)
         else:
             return token
 
@@ -125,11 +126,11 @@ class Scanner:
                 if token_type == 'ID':
                     temp_token_list.append(self.judgeWord(word,line))
                 elif token_type == 'CONST ID':
-                    temp_token_list.append(self.Token('CONST ID',float(word),None))
+                    temp_token_list.append(Token('CONST ID',float(word),None))
                 elif token_type == 'COMMENT':
                     return
                 else:
-                    temp_token_list.append(self.Token(token_type,word,None))
+                    temp_token_list.append(Token(token_type,word,None))
                 word = ""
                 statue = 0
             if ch.isspace():
@@ -151,5 +152,9 @@ class Scanner:
             while buffer is not "":
                 line += 1
                 buffer = source.readline()
-                Token_list.append(self.LINETOKEN(line,self.Parser(buffer,line)))
+                Token_list.append(LINETOKEN(line,self.Parser(buffer,line)))
         return Token_list
+
+if __name__ == "__main__":
+    scan = Scanner("helloworld.c")
+    print(scan.scanFile())
