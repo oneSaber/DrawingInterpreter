@@ -1,4 +1,5 @@
-from Lexer import *
+from Lexer import Scanner
+from Lexer import Token
 
 class ErrorMessage(Exception):
     def __init__(self,message_code,line):
@@ -115,7 +116,8 @@ class LineParser:
     def pargram(self):
         while(self.token.type != "NoneToken"):
             self.Statement()
-            self.match_token('SEMICO')
+            if self.token.type == "SEMICO" or self.token.type=="NoneToken":
+                break
 
     def Statement(self):
         if self.token.type == "ORIGIN":
@@ -145,8 +147,6 @@ class LineParser:
         # origin_y
         origin_y = self.Expression()
         self.parameter['origin_y'] = origin_y
-        
-        self.get_token()
         self.match_token("R_BRACKET")
 
     def RotStatement(self):
@@ -295,6 +295,9 @@ class LineParser:
 if __name__ == "__main__":
     parser = Parser("helloworld.c")
     parser.parser_program()
+    line = 1
     for paramter in parser.paramters:
+        print("line {} expr tree".format(line))
+        line += 1
         paramter.show_all_tree()
         

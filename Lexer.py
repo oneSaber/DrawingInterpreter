@@ -50,7 +50,7 @@ class Scanner:
                     13 : {'break': 'COMMENT'}
                     }
 
-        self.fina_statue = (8,9,10,11,12,13)
+        self.fina_statue = (5,8,9,10,11,12,13)
 
     # origin 出发状态, condition 转移条件
     def move(self,origin, condition):
@@ -142,6 +142,7 @@ class Scanner:
             elif ch.isalpha():
                 statue = self.move(statue,'letter')
             word += ch
+        temp_token_list.append(Token("NoneToken",0.0,None))
         return temp_token_list
 
     # 扫描文件读取数据
