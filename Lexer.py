@@ -41,7 +41,7 @@ class Scanner:
                     4 : {'*': 5 ,'break':'MULTIPLICATION'},
                     5 : {'break': 'POWER'},
                     6 : {'/': 13,'break': 'DIVISION'},
-                    7 : {'-' : 13, 'break':'SUBDUCTION'},
+                    7 : {'-' : 13, 'break':'MINUS'},
                     8 : {'break': 'PLUS'},
                     9 : {'break': 'COMMA'},
                     10 : {'break': 'SEMICO'},

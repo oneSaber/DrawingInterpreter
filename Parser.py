@@ -2,11 +2,11 @@ from Lexer import Scanner
 from Lexer import Token
 
 class ErrorMessage(Exception):
-    def __init__(self,message_code,line):
+    def __init__(self,message_code,error_word,line):
         if message_code == 1:
-            self.error_message = "line {}: Error token type in this".format(line)
+            self.error_message = "line {}: Error token {} type in this".format(line,error_word)
         if message_code ==2 :
-            self.error_message == "line {}: Error token in this".format(line)
+            self.error_message == "line {}: Error token {}in this".format(line,error_word)
         if message_code == 3:
             self.error_message == "line {}: had empty".format(line)
 
@@ -42,31 +42,22 @@ class ExprNode:
         else:
             return None
 
+# parser all lines
 class Parser:
     def __init__(self,filename):
         self.scanner = Scanner(filename)
         self.Tokens_list = self.scanner.scanFile()
         self.paramters = []
+    
+    # use lineparser parser ever line
     def parser_program(self):
         Token_list = self.Tokens_list.pop(0)
         while(Token_list.Tokens!=None):
             line_parser = LineParser(Token_list.Tokens,Token_list.LineNo)
             line_parser.parser()
-            self.paramters.append(line_parser)
+            self.paramters.append(line_parser.parameter)
             Token_list = self.Tokens_list.pop(0)
-
-class LineParser:
-    def __init__(self,Token_list,line):
-        self.T = 0.0
-        self.token_list = Token_list
-        self.parameter = {}
-        self.token = None
-        self.line = line
-
-    def show_all_tree(self):
-        for key in self.parameter.keys():
-            self.traceTree(self.parameter[key],0)
-
+    # print a exper tree
     def traceTree(self,treeRoot,space_count):
         if treeRoot.TokenType == "PLUS":
             print("\t"*space_count+"+")
@@ -93,12 +84,30 @@ class LineParser:
         else:
             self.traceTree(treeRoot.get_left_child(),space_count+1)
             self.traceTree(treeRoot.get_right_child(), space_count+1)
+    
+    # print all paramter
+    def Print_paramters(self):
+        line = 1
+        for paramter in self.paramters:
+            print("line {}".format(line))
+            for key in paramter.keys():
+                print("the {} expr tree is :".format(key))
+                self.traceTree(paramter[key],0)
+            line += 1
+
+class LineParser:
+    def __init__(self,Token_list,line):
+        self.T = 0.0
+        self.token_list = Token_list
+        self.parameter = {}
+        self.token = None
+        self.line = line
 
     def get_token(self):
         if len(self.token_list):
             self.token = self.token_list.pop(0)
             if self.token.type == "Error":
-                raise ErrorMessage(2,self.line)
+                raise ErrorMessage(2,self.token.value,self.line)
         else:
             self.token = Token("NoneToken",None,None)
 
@@ -107,7 +116,7 @@ class LineParser:
             self.get_token()
             return True
         else:
-            raise ErrorMessage(1,self.line)
+            raise ErrorMessage(1,self.token.value,self.line)
 
     def parser(self):
         self.get_token()
@@ -129,7 +138,7 @@ class LineParser:
         elif self.token.type == "FOR":
             self.ForStatement()
         else:
-            raise ErrorMessage(1,self.line)
+            raise ErrorMessage(1,self.token.value,self.line)
         
     def OriginStatement(self):
         self.match_token("ORIGIN")
@@ -272,7 +281,7 @@ class LineParser:
             address = self.Expression()
             self.match_token("R_BRACKET")
         else:
-            raise ErrorMessage(1,self.line)
+            raise ErrorMessage(1,self.token.value,self.line)
         return address
         
     def make_expr_node(self,token_type,token_value = None,left_child = None,right_child =None):
@@ -287,17 +296,4 @@ class LineParser:
         else:
             node.set_left_child(left_child)
             node.set_right_child(right_child)
-        return node
-
-
-
-
-if __name__ == "__main__":
-    parser = Parser("helloworld.c")
-    parser.parser_program()
-    line = 1
-    for paramter in parser.paramters:
-        print("line {} expr tree".format(line))
-        line += 1
-        paramter.show_all_tree()
-        
+        return node        
