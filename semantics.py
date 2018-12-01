@@ -39,3 +39,4 @@ class Semantics:
         # value of expr
         # apply_expr
         # flag for var for can_draw
+        pass
