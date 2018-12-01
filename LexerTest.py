@@ -1,7 +1,7 @@
 from Lexer import Scanner
 import os
-
 base_path = os.getcwd()
+
 
 if __name__ == "__main__":
     file_name = input("Source file name:")

@@ -1,6 +1,6 @@
 # 画图程序的词法分析器
 from collections import namedtuple
-import math
+import numpy as np
 
 Token = namedtuple('Token',['type','value','function'])
 LINETOKEN = namedtuple("LINETOKEN",['LineNo','Tokens'])
@@ -12,15 +12,15 @@ class Scanner:
         self.special = ('*','/','-','+','(',')',',',';','.')
 
         # 保留关键字
-        self.Token_table = {'PI': Token('CONST ID', 3.1415926,None),
+        self.Token_table = {'PI': Token('CONST ID', np.pi,None),
               'E': Token('CONST ID', 2.71828,None),
               'T': Token('T', 0.0,None),
-              'SIN': Token('FUNC', 0.0,math.sin),
-              'COS': Token('FUNC', 0.0,math.cos),
-              'TAN': Token('FUNC', 0.0,math.tan),
-              'LN': Token('FUNC', 0.0,math.log),
-              'EXP': Token('FUNC', 0.0,math.exp),
-              'SQRT':Token('FUNC', 0.0,math.sqrt),
+              'SIN': Token('FUNC', 0.0,np.sin),
+              'COS': Token('FUNC', 0.0,np.cos),
+              'TAN': Token('FUNC', 0.0,np.tan),
+              'LN': Token('FUNC', 0.0,np.log),
+              'EXP': Token('FUNC', 0.0,np.exp),
+              'SQRT':Token('FUNC', 0.0,np.sqrt),
               'ORIGIN': Token('ORIGIN', 0.0,None),
               'SCALE': Token('SCALE',0.0,None),
               'ROT': Token('ROT', 0.0,None),

@@ -48,8 +48,6 @@ def CreateTree(value_list):
     return root
 
 
-
-
 if __name__ == "__main__":
     filename = input("Source filename:")
     parser = Parser(filename)
