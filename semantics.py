@@ -13,18 +13,25 @@ class Semantics:
         self.start_x = 0.0
         self.start_y = 0.0
         self.Paramter_list = paramter_list
-    
+        self.expr_tree
+
     # the semantics' entrance
     def Semantic(self):
-        pass
-    
+        self.get_next_expr()
+        while(self.expr_tree is not None):
+            self.value_of_expr()
+            self.get_next_expr()
+
     # calculate the result of expr
     def value_of_expr(self):
         pass
     
     # get next expr
     def get_next_expr(self):
-        pass
+        if len(self.Paramter_list) >0:
+            self.expr_tree = self.Paramter_list.pop(0)
+        else:
+            return None
     
     # judge whether you can start draw
     def can_draw(self):
@@ -34,9 +41,3 @@ class Semantics:
     def next_line(self):
         pass
     
-    def apply_expr(self,key,expr):
-        # get a expr and its name
-        # value of expr
-        # apply_expr
-        # flag for var for can_draw
-        pass

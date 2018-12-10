@@ -47,7 +47,6 @@ def CreateTree(value_list):
         InsertNode(node,value)
     return root
 
-
 if __name__ == "__main__":
     filename = input("Source filename:")
     parser = Parser(filename)

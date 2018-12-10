@@ -39,21 +39,12 @@ class DrawPricture:
         for (pos,color) in self.position_list:
             plt.plot(pos[0],pos[1],color)
         plt.show()
-    # start,end,step is th e num
-    # x_expr and y_expr is a function about x and y
-    # for example :
-    # def x_expr(t,origin_x):
-    #   # x = t
-    #   return x 
-    # end 不能省略！
-    def set_picture(self,step,x_expr,y_expr,start = 0,end = 0,color='black'):
+    # x,y are postion of x,y
+    def set_picture(self,x,y,color='black'):
         if end == 0:
             print("must have end!")
             return
         T = np.linspace(start,end,(end-start)/step * 50)
-        # 先求原始的x和y坐标矩阵，分别求
-        x = x_expr(T,self.origin_x)
-        y = y_expr(T,self.origin_y)
         # 然后进行缩放
         x = self.scalex(x)
         y = self.scaley(y)

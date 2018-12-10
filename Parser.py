@@ -42,6 +42,14 @@ class ExprNode:
         else:
             return None
 
+    def is_leaf(self):
+        # if the node is a leaf
+        # return true
+        if self.child_number == 0:
+            return True
+        else:
+            return False
+
 # parser all lines
 class Parser:
     def __init__(self,filename):
