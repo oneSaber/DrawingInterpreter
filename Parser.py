@@ -99,6 +99,8 @@ class Parser:
         for paramter in self.paramters:
             print("line {}".format(line))
             for key in paramter.keys():
+                if key == "can_draw":
+                    continue
                 print("the {} expr tree is :".format(key))
                 self.traceTree(paramter[key],0)
             line += 1
@@ -150,15 +152,12 @@ class LineParser:
         
     def OriginStatement(self):
         self.match_token("ORIGIN")
-
         self.match_token("IS")
- 
         self.match_token("L_BRACKET")
-        
+    
         # origin_x
         origin_x = self.Expression()
         self.parameter['origin_x'] = origin_x
-
         self.match_token("COMMA")
 
         # origin_y
@@ -219,6 +218,7 @@ class LineParser:
         start_y = self.Expression()
         self.parameter['start_y'] = start_y
         self.match_token("R_BRACKET")
+        self.parameter['can_draw'] = True
 
     def Expression(self):
         left = None

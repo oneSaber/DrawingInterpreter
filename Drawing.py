@@ -2,8 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class DrawPricture:
-
-    def __init__(self):
+    def __init__(self,filename):
         self.origin_x = 0
         self.origin_y = 0
         self.scale_x = 1
@@ -13,6 +12,7 @@ class DrawPricture:
         self.min = 1000000
         self.max = -100000
         self.position_list = []
+        self.title = filename
     # 配置全局设置
     def set_origin(self,x=0,y=0):
         self.origin_x = x
@@ -38,6 +38,7 @@ class DrawPricture:
     def draw(self):
         for (pos,color) in self.position_list:
             plt.plot(pos[0],pos[1],color)
+        plt.title(self.title)
         plt.show()
     # x,y are postion of x,y
     def set_picture(self,x,y,color='black'):

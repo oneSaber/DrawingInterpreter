@@ -5,17 +5,7 @@ import numpy as np
 
 class Semantics:
     def __init__(self,paramter_list,drawing):
-        self.origin_x = 0.0
-        self.origin_y = 0.0
-        self.for_start = 0.0
-        self.for_end = 0.0
-        self.rot = 0.0
-        self.scale_x = 0.0
-        self.scale_y = 0.0
-        self.for_step = 0.0
-        self.start_x = 0.0
-        self.start_y = 0.0
-        self.T = None
+        self.symbol_table = {}
         self.Paramter_list = paramter_list
         self.expr_map = None
         self.expr_tree = None
@@ -27,8 +17,14 @@ class Semantics:
         while len(self.Paramter_list) >0:
             self.next_line()
             for key in self.key_list:
-                print(key,self.value_of_expr(self.expr_map.get(key)))
-    
+                if key == "can_draw" and self.expr_map[key] == True:
+                    self.can_draw()
+                    continue
+                value = self.value_of_expr(self.expr_map.get(key))
+                if (key == "start_x" or key == "start_y")and type(value) != np.ndarray:
+                    value = np.linspace(value,value,int(np.abs(self.symbol_table.get("for_end")-self.symbol_table.get("for_start"))/self.symbol_table.get("for_step")))
+                self.symbol_table[key] = value
+                print(key,type(value),value)
     
     
     # calculate the result of expr
@@ -39,12 +35,12 @@ class Semantics:
             if node.TokenType == "CONST ID":
                 return node.content
             if node.TokenType == "T":
-                if self.T is None and \
-                    self.for_end != 0.0 and \
-                    self.for_step != 0.0:
-                    self.T = np.linspace(self.for_start,self.for_end,
-                        np.abs(self.for_end-self.for_start)/self.for_step)
-                    return self.T
+                if  self.symbol_table.get("for_start",None)!= None and \
+                    self.symbol_table.get("for_end",None) != None:
+                    T = np.linspace(self.symbol_table.get("for_start"),
+                        self.symbol_table.get("for_end"),
+                        int(np.abs(self.symbol_table.get("for_end")-self.symbol_table.get("for_start"))/self.symbol_table.get("for_step")))
+                    return T
         else:
             left = self.value_of_expr(node.get_left_child())
             right = self.value_of_expr(node.get_right_child())
@@ -55,16 +51,26 @@ class Semantics:
             elif node.TokenType == "MULTIPLICATION":
                 return left * right
             elif node.TokenType == "DIVISION":
-                return left * right
+                return left / right
             elif node.TokenType == "POWER":
                 return left ** right
             elif node.TokenType == "FUNC":
                 return node.content(left)
             
-
     # judge whether you can start draw
-    def can_draw(self,x,y):
-        self.drawing.set_picture(x,y)
+    def can_draw(self):
+        x = self.symbol_table.get('start_x',None)
+        y = self.symbol_table.get('start_y',None)
+        if x is not None and y is not None:
+            self.drawing.set_origin(self.symbol_table.get('orign_x',0.0),self.symbol_table.get('orign_y',0.0))
+            self.drawing.set_rot(self.symbol_table.get('rot',0.0))
+            self.drawing.set_scale(self.symbol_table.get("scale_x",1),self.symbol_table.get('scale_y',1))
+            self.drawing.set_picture(x,y)
+            self.symbol_table.pop("for_start")
+            self.symbol_table.pop("for_end")
+            self.symbol_table.pop("start_x")
+            self.symbol_table.pop("start_y")
+            self.symbol_table.pop("for_step")
 
     # get next line expr
     def next_line(self):
@@ -73,9 +79,9 @@ class Semantics:
 
 if __name__ == "__main__":
     drawing = DrawPricture()
-    filename = input("Source filename:")
-    parser = Parser(filename)
+    # filename = input("Source filename:")
+    parser = Parser("DrawSource")
     parser.parser_program()
-    parser.Print_paramters()
     sement = Semantics(paramter_list=parser.paramters,drawing=drawing)
     sement.Semantic()
+    drawing.draw()
