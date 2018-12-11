@@ -41,10 +41,6 @@ class DrawPricture:
         plt.show()
     # x,y are postion of x,y
     def set_picture(self,x,y,color='black'):
-        if end == 0:
-            print("must have end!")
-            return
-        T = np.linspace(start,end,(end-start)/step * 50)
         # 然后进行缩放
         x = self.scalex(x)
         y = self.scaley(y)
@@ -57,18 +53,4 @@ class DrawPricture:
         #  把该图形的矩阵加入到列表中
         self.position_list.append((rot_postion,color))
 
-def x_expr1(T,origin_x):
-    return T+origin_x
-def y_expr1(T,origin_y):
-    return T+origin_y
-def x_expr2(T,origin_x):
-    return np.cos(T)
-def y_expr2(T,origin_y):
-    return np.sin(T)
 
-if __name__ == "__main__":
-    dp = DrawPricture()
-    dp.set_picture(np.pi/50,x_expr1,y_expr1,0,2*np.pi,color="red")
-    dp.set_picture(np.pi/50,x_expr2,y_expr2,0,2*np.pi,color="blue")
-    dp.draw()
-    
