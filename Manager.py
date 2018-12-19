@@ -14,8 +14,6 @@ def drawPicture(filename):
     sement.Semantic()
     drawing.draw()
 
-
-
 if __name__ == "__main__":
     filenames = sys.argv[1:]
     for filename in filenames:
