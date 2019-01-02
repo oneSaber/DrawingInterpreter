@@ -27,14 +27,9 @@ class Semantics:
                     value = np.linspace(value, value, int(np.abs(self.symbol_table.get(
                         "for_end") - self.symbol_table.get("for_start")) / self.symbol_table.get("for_step")))
                 self.symbol_table[key] = value
-<<<<<<< HEAD
                 
     
     
-=======
-                print(key, type(value), value)
-
->>>>>>> 9b0b062952f8b8a28170e6f5a2e5a372d517132a
     # calculate the result of expr
 
     def value_of_expr(self, node):
@@ -76,23 +71,10 @@ class Semantics:
         x = self.symbol_table.get('start_x', None)
         y = self.symbol_table.get('start_y', None)
         if x is not None and y is not None:
-<<<<<<< HEAD
             self.drawing.set_origin(self.symbol_table.get('origin_x',0.0),self.symbol_table.get('origin_y',0.0))
             self.drawing.set_rot(self.symbol_table.get('rot_angele',0.0))
             self.drawing.set_scale(self.symbol_table.get("scale_x",1),self.symbol_table.get('scale_y',1))
             self.drawing.set_picture(x,y)
-=======
-            self.drawing.set_origin(
-                self.symbol_table.get(
-                    'orign_x', 0.0), self.symbol_table.get(
-                    'orign_y', 0.0))
-            self.drawing.set_rot(self.symbol_table.get('rot', 0.0))
-            self.drawing.set_scale(
-                self.symbol_table.get(
-                    "scale_x", 1), self.symbol_table.get(
-                    'scale_y', 1))
-            self.drawing.set_picture(x, y)
->>>>>>> 9b0b062952f8b8a28170e6f5a2e5a372d517132a
             self.symbol_table.pop("for_start")
             self.symbol_table.pop("for_end")
             self.symbol_table.pop("start_x")

@@ -318,8 +318,4 @@ class LineParser:
         else:
             node.set_left_child(left_child)
             node.set_right_child(right_child)
-<<<<<<< HEAD
         return node  
-=======
-        return node
->>>>>>> 9b0b062952f8b8a28170e6f5a2e5a372d517132a

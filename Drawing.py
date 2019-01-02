@@ -22,14 +22,8 @@ class DrawPricture:
 
     def set_scale(self, x=1, y=1):
         self.scale_x = x
-<<<<<<< HEAD
         self.scale_y = y
     def set_rot(self,rot = 0):
-=======
-        self.origin_y = y
-
-    def set_rot(self, rot=0):
->>>>>>> 9b0b062952f8b8a28170e6f5a2e5a372d517132a
         self.rot = rot
         self.create_rot_matrix()
 
